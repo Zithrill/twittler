@@ -2,9 +2,17 @@
 <html>
   <head>
     <style type="text/css">
-
+      body {
+        background: #e8e8e8;
+        font-size: 10px;
+        color: #001de8;
+        font-size: 16px;
+        font-weight: 300;
+        line-height: 1.25;
+        font-family: 'Lato', Arial, sans-serif;
+      }
     </style>
-    <script src="jquery.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="data_generator.js"></script>
   </head>
   <body>
@@ -18,7 +26,7 @@
           currentTweet += 1;
         }
       };
-      //get new chat every 3000 milliseconds or 3 min
+      //get new chat every 100 milliseconds or 0.1 second
       window.setInterval("fetchMessages()", 100);
       //Append function for html insertion
       function appendMessage (mesgIn) {
@@ -35,13 +43,10 @@
         } else{
           console.log($("ul li").length);
           //if there are more than 10 messages being displayed delete the first one
-          //remove not working properly. 
-          //Suspect custom jQuery code?? or possible css issues
-          $("ul:first-child").remove("",function(){
+          $("li").first().remove("",function(){
             //then add the new one in after the top message has been removed
             appendMessage(mesgIn);
           });
-
         };
       }
 
