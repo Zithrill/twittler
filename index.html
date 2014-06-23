@@ -1,27 +1,52 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <style type="text/css">
+
+    </style>
     <script src="jquery.js"></script>
     <script src="data_generator.js"></script>
   </head>
   <body>
     <script>
-
-      $(document).ready(function(){
-        var $body = $('body');
-        $body.html('');
-
-        var index = streams.home.length - 1;
-        while(index >= 0){
-          var tweet = streams.home[index];
-          var $tweet = $('<div></div>');
-          $tweet.text('@' + tweet.user + ': ' + tweet.message);
-          $tweet.appendTo($body);
-          index -= 1;
+      var currentTweet = 0;
+      var topMesg = 0;
+      function fetchMessages (){
+        //We use this to populate the list 
+        while(currentTweet <= streams.home.length -1){
+          setMessage(streams.home[currentTweet]);
+          currentTweet += 1;
         }
+      };
+      //get new chat every 3000 milliseconds or 3 min
+      window.setInterval("fetchMessages()", 100);
+      //Append function for html insertion
+      function appendMessage (mesgIn) {
+        //add the message to the document
+        $(".messages").append('<li>' + "@" + mesgIn.user + mesgIn.message + '</li>');
+      }
+      //adds an li element to the page with the content if a string
+      //also deletes old elements if more than 10 are present
+      function setMessage (mesgIn) {
+        //Counting the number of currently displayed messages
+        if ($("ul li").length < 10) {
+          //Adds an element containing our message
+          appendMessage(mesgIn);
+        } else{
+          console.log($("ul li").length);
+          //if there are more than 10 messages being displayed delete the first one
+          //remove not working properly. 
+          //Suspect custom jQuery code?? or possible css issues
+          $("ul:first-child").remove("",function(){
+            //then add the new one in after the top message has been removed
+            appendMessage(mesgIn);
+          });
 
-      });
+        };
+      }
 
     </script>
+    <ul class="messages">
+    </ul>
   </body>
 </html>
