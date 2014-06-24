@@ -24,6 +24,8 @@
   </head>
   <body>
     <script>
+      var visitor = true;
+      var userName = '';
       var currentTweet = 0;
       var topMesg = 0;
       function fetchMessages (){
@@ -63,9 +65,23 @@
       }
 
     </script>
-    <h1>Twittler Feed</h1>
-    <div>
-      <ul class="messages"></ul>
-    </div>
+    <section>
+      <section id='head'><!--Header Container-->
+        <h1>Twittler Feed</h1>
+      </section>
+      <section id='message'><!--Messages Container-->
+        <div>
+          <ul class="messages"></ul>
+        </div>
+      </section id='userInfo'> 
+      <section><!--User Info Container-->
+        <div>
+          
+        </div>
+      </section>
+      <section><!--Empty Container-->
+        
+      </section>    
+    </section>
   </body>
 </html>
