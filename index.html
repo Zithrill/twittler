@@ -1,87 +1,114 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <style type="text/css">
-      body {
-        background: #e8e8e8;
-        font-size: 10px;
-        color: #001de8;
-        font-size: 16px;
-        font-weight: 300;
-        line-height: 1.25;
-        font-family: 'Lato', Arial, sans-serif;
-
-      }
-      ul
-      {
-          list-style-type: none;
-          position: relative;
-
-      }
-    </style>
+  <link rel="stylesheet" type="text/css" href="index.css">
     <script src="jquery.js"></script>
     <script src="data_generator.js"></script>
   </head>
   <body>
     <script>
       var visitor = true;
-      var userName = '';
+      var userName = 'Visitor';
+      var userNamesToFetch = "all";
       var currentTweet = 0;
       var topMesg = 0;
+      var visitorTweetCount = 0;
+
       function fetchMessages (){
-        //We use this to populate the list 
-        while(currentTweet <= streams.home.length -1){
-          setMessage(streams.home[currentTweet]);
-          currentTweet += 1;
-        }
+        //We use this to populate the list
+        if (userNamesToFetch == "all") {
+        	while(currentTweet <= streams.home.length -1){
+        	  setMessage(streams.home[currentTweet]);
+        	  currentTweet += 1;
+        	}
+        } else{
+        	while(currentTweet <= streams.users.userNamesToFetch.length -1){
+        	  setMessage(streams.users.userNamesToFetch[currentTweet]);
+        	  currentTweet += 1;
+        	}
+        }; 
       };
       //get new chat every 100 milliseconds or 0.1 second
-      window.setInterval("fetchMessages()", 100);
+      var getNewMessagesID = window.setInterval("fetchMessages()", 100);
       //Append function for html insertion
       function appendMessage (mesgIn) {
         //add the message to the document
-        $(".messages").append('<li>'  + mesgIn.created_at.toLocaleTimeString() 
+        $(".messages").prepend('<li>'  + mesgIn.created_at.toLocaleTimeString() 
                                       + ": " 
                                       + "@" 
-                                      + mesgIn.user
+                                      + "<span onclick=\"displayOnlyUser(mesgIn.user)\">" 
+                                      + mesgIn.user 
+                                      + "</span>"
                                       + mesgIn.message 
                                       + '</li>');
       }
       //adds an li element to the page with the content if a string
       //also deletes old elements if more than 10 are present
       function setMessage (mesgIn) {
-        //Counting the number of currently displayed messages
-        if ($("ul li").length < 11) {
-          //Adds an element containing our message
-          appendMessage(mesgIn);
-        } else{
-          console.log($("ul li").length);
-          //if there are more than 10 messages being displayed delete the first one
-          $("li").first().remove("",function(){
-            //then add the new one in after the top message has been removed
-            appendMessage(mesgIn);
-          });
-        };
+        // //Counting the number of currently displayed messages
+        // if ($("ul li").length < 11) {
+        //   //Adds an element containing our message
+        //   appendMessage(mesgIn);
+        // } else{
+        //   console.log($("ul li").length);
+        //   //if there are more than 10 messages being displayed delete the first one
+        //   $("li").last().remove("",function(){
+        //     //then add the new one in after the top message has been removed
+        //     appendMessage(mesgIn);
+        //   });
+        // };
+        appendMessage(mesgIn);
       }
+      function displayOnlyUser (user) {
+      	userNamesToFetch = user;
+      	currentTweet = 0;
+      	$("li").every.remove();
+      	window.clearInterval(getNewMessagesID);
+      	getNewMessagesID = window.setInterval("fetchMessages()", 100);
+      }
+      $(document).ready(function() {
+      	//Set the displayed user
+      	$("#currentUser").text("Current User is: " + userName.toString());
+      	$("#tweet_count").text(visitorTweetCount.toString());
+      	$("#following_count").text("0");
+      	$("#followers_count").text("0");
+      });
 
     </script>
-    <section>
-      <section id='head'><!--Header Container-->
-        <h1>Twittler Feed</h1>
-      </section>
-      <section id='message'><!--Messages Container-->
-        <div>
-          <ul class="messages"></ul>
-        </div>
-      </section id='userInfo'> 
-      <section><!--User Info Container-->
-        <div>
-          
-        </div>
-      </section>
-      <section><!--Empty Container-->
-        
-      </section>    
-    </section>
+	<section>
+		<div id='head'><!--Header Container-->
+			<h1>Twittler Feed</h1>
+		</div>
+		<div id="info_wrapper">
+			<div id='userInfo'><!--User Info Container-->
+				<div id="current_user_wrapper">
+					<P id='currentUser'>Current User is:</P>
+				</div>
+				<div id="stats_wrapper">
+					<div id="stats">
+						<p id="tweets_lable" class="lable">Tweets</p>
+						<p id="tweet_count" class="count"></p>
+					</div>
+					<div id="stats">
+						<p id="following_lable" class="lable">Following</p>
+						<p id="following_count" class="count"></p>
+					</div>
+					<div id="stats">
+						<p id="followers_lable" class="lable">Followers</p>
+						<p id="followers_count" class="count"></p>
+					</div>
+				</div>
+				<div id="new_tweet_div">
+					<input type="text", value="Compose new Tweet", name="new_tweet">
+				</div>
+			</div>
+		</div>
+		<div id='message'><!--Messages Container-->
+			<div>
+				<ul class="messages"></ul>
+			</div>
+		</div> 
+		<div><!--Empty Container--></div>
+	</section>
   </body>
 </html>
