@@ -51,7 +51,14 @@ span:hover{
   border: 0.25em solid black;
 }
 #new_tweet_div{
+  position: relative;
   text-align: center;
+  padding-bottom: 0.1em;
+}
+#submit_tweet{
+  height: 1.5em;
+  width: 4em;
+  display: inline;
 }
 #stats_wrapper{
   display: table-row;

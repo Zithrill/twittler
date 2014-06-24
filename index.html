@@ -30,8 +30,8 @@
                 appendMessage(streams.users[userNamesToFetch][currentTweet]);
                 currentTweet += 1;
             }
-        }; 
-      };
+        }
+      }
       //Prepend function for html insertion
       function appendMessage (mesgIn) {
         //add the message to the document
@@ -57,7 +57,7 @@
             userNamesToFetch = userIn;
             //initate a new interval
             getNewMessagesID = window.setInterval("fetchMessages()", 500);
-        };
+        }
       }
       function submitTweet (argument) {
         var exists = false;
@@ -65,24 +65,25 @@
         for(entry in streams.users){ 
             if (entry == visitor) {
                 exists = true;
-            }; 
-        };
+            } 
+        }
         if (!exists) {
             streams.users[visitor] = [];
-        };
+        }
         // reset the flag incase we change users
         exists = false;
         writeTweet(argument);
       }
       //chance to gain a new follower
       function newFollower () {
-        if (Math.round(Math.random(0,2)) && visitorFollowers < streams.users.length) {
+        if (Math.round(Math.random(0,2)) && visitorFollowers < Object.keys(streams.users).length) {
             visitorFollowers += 1;
             $("#followers_count").text(visitorFollowers.toString());
-        };
-          setTimeout(scheduleNextTweet, Math.random() * 600000);
+            console.log("Inner Fired");
+        }
+          setTimeout(newFollower, Math.random() * 300000);
+          console.log("Outer Fired");
       }
-
       $(document).ready(function() {
         //Set the displayed user
         $("#currentUser").text("Current User is: " + userName.toString());
@@ -98,7 +99,6 @@
             $("#tweet_count").text(visitorTweetCount.toString());
         });
       });
-
     </script>
     <section>
         <div id='head'><!--Header Container-->
@@ -125,7 +125,7 @@
                 </div>
                 <div id="new_tweet_div">
                     <input id="tweet" type="text", placeholder="Compose new Tweet", name="new_tweet" style="display: inline;">
-                    <button id="submit_tweet" style="display: inline-block;"></button>
+                    <button id="submit_tweet" style="display: inline-block;">Tweet</button>
                 </div>
             </div>
         </div>
