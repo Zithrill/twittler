@@ -36,6 +36,9 @@ h1{
 }
 #message{
   float: left;
+  height: 20em;
+  width: 50em;
+  overflow: auto;
 }
 #userInfo{
   float: left;
