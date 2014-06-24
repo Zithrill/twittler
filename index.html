@@ -12,8 +12,9 @@
       var userNamesToFetch = "all";
       var currentTweet = 0;
       var visitorTweetCount = 0;
-      //get new tweet every 100 milliseconds or 0.1 second
-      var getNewMessagesID = window.setInterval("fetchMessages()", 100);
+      var visitorFollowers = 0;
+      //get new tweet every 500 milliseconds or 0.5 second
+      var getNewMessagesID = window.setInterval("fetchMessages()", 500);
       function fetchMessages (){
         //We use this to populate the list
         //Check if we should get all the users or just one
@@ -55,22 +56,31 @@
             //Apply the desired user name
             userNamesToFetch = userIn;
             //initate a new interval
-            getNewMessagesID = window.setInterval("fetchMessages()", 100);
+            getNewMessagesID = window.setInterval("fetchMessages()", 500);
         };
       }
       function submitTweet (argument) {
         var exists = false;
+        //Check to see if the user is in the stream yet
         for(entry in streams.users){ 
             if (entry == visitor) {
                 exists = true;
             }; 
         };
-          if (exists) {
-            writeTweet(argument);
-          } else{
-            streams.users.visitor = [];
-            submitTweet(argument);
-          };
+        if (!exists) {
+            streams.users[visitor] = [];
+        };
+        // reset the flag incase we change users
+        exists = false;
+        writeTweet(argument);
+      }
+      //chance to gain a new follower
+      function newFollower () {
+        if (Math.round(Math.random(0,2)) && visitorFollowers < streams.users.length) {
+            visitorFollowers += 1;
+            $("#followers_count").text(visitorFollowers.toString());
+        };
+          setTimeout(scheduleNextTweet, Math.random() * 600000);
       }
 
       $(document).ready(function() {
@@ -79,13 +89,13 @@
         $("#tweet_count").text(visitorTweetCount.toString());
         $("#following_count").text("0");
         $("#followers_count").text("0");
+        newFollower();
         var inputBox = $("#tweet");
         var submitButton = $("#submit_tweet");
         submitButton.click(function(){
-            var getval = ($("#tweet").val()?$("#tweet").val():alert('please fill the text field'))
-            if(getval){
-                submitTweet(getval); 
-            }
+            submitTweet($("#tweet").val());
+            visitorTweetCount += 1;
+            $("#tweet_count").text(visitorTweetCount.toString());
         });
       });
 
@@ -114,7 +124,7 @@
                     </div>
                 </div>
                 <div id="new_tweet_div">
-                    <input id="tweet" type="text", value="Compose new Tweet", name="new_tweet" style="display: inline;">
+                    <input id="tweet" type="text", placeholder="Compose new Tweet", name="new_tweet" style="display: inline;">
                     <button id="submit_tweet" style="display: inline-block;"></button>
                 </div>
             </div>
