@@ -38,8 +38,8 @@
         $(".messages").prepend('<li>'  + mesgIn.created_at.toLocaleTimeString() 
                                       + ": " 
                                       + "@" 
-                                      // This sets of a listener on the name so that we can click it
-                                      + "<span onClick=displayOnlyUser(\"" + mesgIn.user + "\")>" 
+                                      // sets the class so that we can click whats in the span to do stuff
+                                      + "<span id=\"" + mesgIn.user + "\" class=\"selectUser\">" 
                                       + mesgIn.user 
                                       + "</span> "
                                       + mesgIn.message 
@@ -79,10 +79,8 @@
         if (Math.round(Math.random(0,2)) && visitorFollowers < Object.keys(streams.users).length) {
             visitorFollowers += 1;
             $("#followers_count").text(visitorFollowers.toString());
-            console.log("Inner Fired");
         }
           setTimeout(newFollower, Math.random() * 300000);
-          console.log("Outer Fired");
       }
       $(document).ready(function() {
         //Set the displayed user
@@ -90,7 +88,7 @@
         $("#tweet_count").text(visitorTweetCount.toString());
         $("#following_count").text("0");
         $("#followers_count").text("0");
-        newFollower();
+        setTimeout(newFollower, Math.random() * 100000);
         var inputBox = $("#tweet");
         var submitButton = $("#submit_tweet");
         submitButton.click(function(){
@@ -98,6 +96,10 @@
             visitorTweetCount += 1;
             $("#tweet_count").text(visitorTweetCount.toString());
         });
+        //The event listeners for all class selectUser 
+        $("body").on("click", ".selectUser", function () {
+            displayOnlyUser(this.id);
+        })
       });
     </script>
     <section>
